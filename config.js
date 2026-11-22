@@ -7,7 +7,7 @@ window.SHEBA_CONFIG = {
   // PLACEHOLDER — Guy sets the real PIN before the kiosk goes to Sheba. Digits only, 4–8 long.
   STAFF_PIN: "0000",
 
-  // Guided session ("התחל להתאמן"): four games, one per skill tile —
+  // Guided session (start button): four games, one per skill tile —
   // עקוב אחרי (פוקוס) → אתגר הזיכרון (זיכרון) → מוח גמיש (חדות מחשבה) → coordination game below.
   //   "auto"           → two_hand_sync (אימון שתי ידיים), unless the screen reports exactly one touch point,
   //                      then two_hand_touch (תפיסה דו-ידית, one finger at a time)

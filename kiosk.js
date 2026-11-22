@@ -120,30 +120,44 @@
 
   // ── Start screen (mock 01) ───────────────────────────────────────────────
   // Guy play-test 22.11: marketing line instead of "בזמן ההמתנה"; no explanatory sublines.
-  const TXT = { headline: "כושר למוח,<br>בכמה דקות", kicker: "4 משחקים · כ-5 דקות" };
+  // Guy 22.11 14:54: logo on every screen, skill tile starts a random game at once,
+  // QR to app.lunamind.ai, start button "חידוד מוח על ידי מאמן AI", kicker line removed.
+  const LOGO = `<img class="lm-logo" src="assets/logo.png" alt="LunaMind">`;
+  const TXT = { headline: "כושר למוח,<br>בכמה דקות" };
+  function playableFor(sk) {
+    let items = (PICK[sk] || []).filter((it) => GAMES[it.id]);
+    // Same auto rule as the guided session: on a single-touch screen, תפיסה דו-ידית stands in for אימון שתי ידיים.
+    if (sk === "coord" && (CFG.GUIDED_COORD || "auto") === "auto" && navigator.maxTouchPoints === 1) {
+      items = items.filter((it) => it.id !== "two_hand_sync");
+    }
+    return items;
+  }
+  function startSkill(sk) {
+    const playable = playableFor(sk);
+    if (!playable.length) return;
+    const it = playable[Math.floor(Math.random() * playable.length)];
+    count("open_skill_" + sk);
+    count("start_skill");
+    session = { mode: "skill", queue: [it.id], idx: 0, results: [] };
+    showInstr();
+  }
   function showStart() {
     screen = "start"; setPlaying(false);
     view().innerHTML = `<div class="scr" id="scrStart">
       <div id="staffHot" aria-hidden="true"></div>
-      <div class="hl"><img src="assets/logo.png" alt="LunaMind"></div>
+      <div class="hl">${LOGO}</div>
       <div class="hc caps">BrainGym</div>
       <div class="r1 rule"></div>
       <div class="hm">
-        <div class="label kick"><i></i>${TXT.kicker}</div>
         <h1 class="xl">${TXT.headline}</h1>
-        <div class="hact"><button class="cta huge" id="goGuided">התחל להתאמן${ICON.arrow(44, "#FFFFFF", 2.6)}</button></div>
+        <div class="hact"><button class="cta huge" id="goGuided">חידוד מוח על ידי מאמן AI${ICON.arrow(44, "#FFFFFF", 2.6)}</button></div>
       </div>
+      <div class="start-qr" aria-hidden="true"><img src="assets/qr-app.svg" alt=""></div>
       <div class="sk"><div class="skh"><div class="label">או בחרו מיומנות לאימון</div></div>
         <div class="skrow">${SKILLS.map((s) => `<button class="sk1" data-skill="${s.id}">${ICON[s.id]()}<div class="n">${esc(s.name)}</div><span class="ar">${ICON.arrow()}</span></button>`).join("")}</div>
       </div></div>`;
     $("#goGuided").addEventListener("click", () => { count("start_guided"); session = { mode: "guided", queue: guidedQueue(), idx: 0, results: [] }; showInstr(); });
-    view().querySelectorAll("[data-skill]").forEach((b) => b.addEventListener("click", () => {
-      const sk = b.dataset.skill, playable = (PICK[sk] || []).filter((it) => GAMES[it.id]);
-      count("open_skill_" + sk);
-      // one playable game → straight to its instruction card (Design FIXES 7); יציאה there returns to start
-      if (playable.length === 1) { count("start_skill"); session = { mode: "skill", queue: [playable[0].id], idx: 0, results: [] }; showInstr(); }
-      else showPick(sk);
-    }));
+    view().querySelectorAll("[data-skill]").forEach((b) => b.addEventListener("click", () => startSkill(b.dataset.skill)));
     bindStaffHot();
   }
 
@@ -152,7 +166,7 @@
     screen = "pick"; setPlaying(false);
     const items = (PICK[skill] || []).filter((it) => GAMES[it.id]);   // rows for games not built are hidden
     view().innerHTML = `<div class="scr">
-      <div class="gh"><div class="gt"><span class="gname">אימון לפי מיומנות</span></div>
+      <div class="gh"><img class="lm-logo gh-logo" src="assets/logo.png" alt="LunaMind"><div class="gt"><span class="gname">אימון לפי מיומנות</span></div>
         <button class="exit" id="back">${ICON.back(26)}חזרה</button></div>
       <div class="pkwrap"><h1>${ICON[skill](72)}${esc(SKILL_NAME[skill])}</h1>
         <div class="pklist">${items.map((it) => {
@@ -172,7 +186,7 @@
     const guided = session && session.mode === "guided";
     const dots = guided ? `<span class="dots">${session.queue.map((_, i) => `<i class="${i < session.idx ? "done" : i === session.idx ? "on" : ""}"></i>`).join("")}</span>` : "";
     const mid = guided ? `משחק ${session.idx + 1} מתוך ${session.queue.length}` : "אימון לפי מיומנות";
-    return `<div class="gh"><div class="gt"><span class="gname">${esc(def.name)}</span><span class="gskill">${esc(SKILL_NAME[def.skill])}</span></div>
+    return `<div class="gh"><img class="lm-logo gh-logo" src="assets/logo.png" alt="LunaMind"><div class="gt"><span class="gname">${esc(def.name)}</span><span class="gskill">${esc(SKILL_NAME[def.skill])}</span></div>
       <div class="gp">${dots}<span>${mid}</span></div>
       <button class="exit" id="exit">${ICON.exit()}יציאה</button></div>`;
   }
@@ -327,7 +341,7 @@
     } else count("game_untouched_" + def.id);
     const card = document.createElement("div"); card.className = "endcard";
     const more = session.idx + 1 < session.queue.length;
-    card.innerHTML = `<div class="ring">${ICON.check(80, "#ECEDF5", 1.6)}</div><h1>${more ? `יפה. ממשיכים למשחק ${session.idx + 2} מתוך ${session.queue.length}.` : "סיימתם. כל הכבוד."}</h1>`;
+    card.innerHTML = `${LOGO}<div class="ring">${ICON.check(80, "#ECEDF5", 1.6)}</div><h1>${more ? `יפה. ממשיכים למשחק ${session.idx + 2} מתוך ${session.queue.length}.` : "סיימתם. כל הכבוד."}</h1>`;
     view().querySelector(".scr").appendChild(card);
     endT = setTimeout(() => {
       session.idx++;
@@ -417,7 +431,7 @@
     if (lim && now - lastInput > lim * 1000) {
       clock.paused = true; idleStart = now;
       idleOv = document.createElement("div"); idleOv.className = "overlay";
-      idleOv.innerHTML = `<h1>עדיין כאן?</h1><div class="body">געו במסך כדי להמשיך</div><div class="bar"><b id="idleBar" style="width:100%"></b></div>`;
+      idleOv.innerHTML = `${LOGO}<h1>עדיין כאן?</h1><div class="body">געו במסך כדי להמשיך</div><div class="bar"><b id="idleBar" style="width:100%"></b></div>`;
       $("#stage").appendChild(idleOv);
       const b = $("#idleBar"); b.style.transition = `width ${CFG.IDLE_OVERLAY || 10}s linear`; requestAnimationFrame(() => requestAnimationFrame(() => (b.style.width = "0%")));
     }
@@ -442,10 +456,10 @@
     const draw = () => {
       const locked = performance.now() < pinLockUntil;
       if (locked) {
-        ov.innerHTML = `<div class="label">צוות בלבד</div><div class="body">יותר מדי ניסיונות. נסו שוב בעוד דקה.</div><button class="ghost" data-x="c" style="width:420px">חזרה</button>`;
+        ov.innerHTML = `${LOGO}<div class="label">צוות בלבד</div><div class="body">יותר מדי ניסיונות. נסו שוב בעוד דקה.</div><button class="ghost" data-x="c" style="width:420px">חזרה</button>`;
         ov.querySelector('[data-x="c"]').addEventListener("click", () => ov.remove()); return;
       }
-      ov.innerHTML = `<div class="label">צוות בלבד</div><div class="pindots">${Array.from({ length: pinLen }, (_, i) => `<i class="${i < typed.length ? "on" : ""}"></i>`).join("")}</div>
+      ov.innerHTML = `${LOGO}<div class="label">צוות בלבד</div><div class="pindots">${Array.from({ length: pinLen }, (_, i) => `<i class="${i < typed.length ? "on" : ""}"></i>`).join("")}</div>
         <div class="pin">${[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => `<button data-n="${n}">${n}</button>`).join("")}<button data-x="c" style="font:500 36px var(--t)">ביטול</button><button data-n="0">0</button><button data-x="b">⌫</button></div>`;
       ov.querySelectorAll("[data-n]").forEach((b) => b.addEventListener("click", () => { typed += b.dataset.n; check(); }));
       ov.querySelector('[data-x="c"]').addEventListener("click", () => ov.remove());
@@ -467,7 +481,7 @@
     const ov = document.createElement("div"); ov.className = "overlay solid"; ov.id = "staffPanel";
     const c = counters();
     const lines = Object.keys(c).sort().map((k) => `${k.padEnd(28)} ${c[k]}`).join("\n");
-    ov.innerHTML = `<div class="label">צוות · קיוסק שיבא</div>
+    ov.innerHTML = `${LOGO}<div class="label">צוות · קיוסק שיבא</div>
       <div class="staffstats">${esc(lines || "—")}</div>
       <div class="staffgrid"><button class="ghost" id="sBack">חזרה לקיוסק</button><button class="ghost" id="sReload">רענון</button>
         <button class="ghost" id="sReset">איפוס מונים</button><button class="ghost" id="sQuit">יציאה מהקיוסק</button></div>
@@ -477,7 +491,7 @@
     $("#sReload").addEventListener("click", () => location.reload());
     $("#sReset").addEventListener("click", () => {
       const cf = document.createElement("div"); cf.className = "overlay solid";
-      cf.innerHTML = `<h1 style="font-size:72px">לאפס את כל המונים?</h1><div class="body">אי אפשר לבטל את זה.</div>
+      cf.innerHTML = `${LOGO}<h1 style="font-size:72px">לאפס את כל המונים?</h1><div class="body">אי אפשר לבטל את זה.</div>
         <div class="staffgrid"><button class="ghost" id="cfYes">כן, לאפס</button><button class="ghost" id="cfNo">לא</button></div>`;
       $("#stage").appendChild(cf); staffIdle(cf);
       cf.querySelector("#cfNo").addEventListener("click", () => cf.remove());
@@ -510,5 +524,5 @@
     showStart();
   }
 
-  window.SHEBA = { register, boot, ICON, GAMES, Staircase, blend, plural, _debug: { get session() { return session; }, get inst() { return inst; }, get screen() { return screen; }, get stair() { return curStair; }, get ended() { return ended; }, clock, showResults: () => showResults(), setSession: (s) => (session = s) } };
+  window.SHEBA = { register, boot, ICON, GAMES, Staircase, blend, plural, _debug: { get session() { return session; }, get inst() { return inst; }, get screen() { return screen; }, get stair() { return curStair; }, get ended() { return ended; }, clock, showResults: () => showResults(), setSession: (s) => (session = s), startGameId: (id) => { session = { mode: "skill", queue: [id], idx: 0, results: [] }; showInstr(); }, playableFor } };
 })();

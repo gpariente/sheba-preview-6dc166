@@ -40,7 +40,7 @@ h1.xl{font-size:118px;line-height:1.08}
 /* buttons */
 .cta{height:124px;border-radius:16px;background:var(--cta);box-shadow:var(--cta-sh);color:#fff;font:600 44px var(--t);letter-spacing:.01em;
   display:flex;align-items:center;justify-content:center;gap:18px;position:relative;overflow:hidden}
-.cta.huge{height:132px;border-radius:18px;font-size:50px}
+.cta.huge{height:132px;border-radius:18px;font-size:42px}
 .ghost{height:124px;border-radius:16px;border:1.5px solid rgba(255,255,255,.28);color:var(--ink);font:500 40px var(--t);
   display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.03)}
 .cta:active,.ghost:active,.sk1:active,.pk:active,.exit:active,.tile:active{transform:scale(.97)}
@@ -53,12 +53,10 @@ h1.xl{font-size:118px;line-height:1.08}
 .hl img{height:60px;width:auto}
 .hc{position:absolute;top:122px;left:150px}
 .r1{position:absolute;top:226px;right:150px;left:150px}
-.hm{position:absolute;top:278px;right:150px;width:1300px}
-.hm .kick{display:flex;align-items:center;gap:18px}
-.hm .kick i{width:56px;height:1px;background:var(--kick);display:block}
-.hm h1{margin-top:22px;font-size:100px}
-.hact{display:flex;align-items:center;gap:40px;margin-top:44px}
-.hact .cta{width:600px;justify-content:space-between;padding:0 54px}
+.hm{position:absolute;top:260px;right:150px;width:1240px}
+.hm h1{margin-top:0;font-size:100px}
+.hact{display:flex;align-items:center;gap:40px;margin-top:48px}
+.hact .cta{width:1040px;justify-content:space-between;padding:0 40px 0 32px}
 .hact .small{white-space:nowrap}
 .sk{position:absolute;top:800px;right:150px;left:150px}
 .skh{border-top:1px solid var(--hair);padding-top:22px}
@@ -82,7 +80,7 @@ h1.xl{font-size:118px;line-height:1.08}
 
 /* game header + timer + field (SYSTEM.md §4) */
 .gh{position:absolute;top:36px;right:96px;left:96px;height:84px;display:flex;align-items:center;justify-content:space-between}
-.gt{display:flex;align-items:baseline;gap:22px}
+.gt{display:flex;align-items:baseline;gap:22px;margin-right:190px}
 .gname{font:500 38px var(--t);color:var(--ink)}
 .gskill{font:500 26px var(--t);letter-spacing:.06em;color:var(--kick)}
 .gp{position:absolute;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:20px;font:400 28px var(--t);color:var(--ink2);white-space:nowrap}
@@ -205,3 +203,12 @@ h1.xl{font-size:118px;line-height:1.08}
 #rot{display:none}
 @media (orientation:portrait){#rot{display:flex;position:fixed;inset:0;z-index:999;background:#05060f;color:#ECEDF5;align-items:center;justify-content:center;text-align:center;font:500 28px/1.5 var(--t);padding:40px}}
 .ins-lead{margin-top:14px;font:500 38px var(--t);color:var(--mark)}
+
+/* Guy 22.11 14:54: wordmark on every screen; QR on the start screen, no caption */
+.lm-logo{height:40px;width:auto}
+.hl .lm-logo{height:60px}
+.gh-logo{position:absolute;right:0;top:50%;transform:translateY(-50%);height:32px;z-index:2;pointer-events:none}
+.overlay .lm-logo,.endcard .lm-logo{height:44px}
+.start-qr{position:absolute;left:120px;top:330px;width:280px;height:280px;padding:16px;border-radius:16px;background:#fff;
+  box-shadow:0 12px 36px -16px rgba(4,6,20,.9)}
+.start-qr img{width:100%;height:100%}
