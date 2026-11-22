@@ -79,8 +79,9 @@ h1.xl{font-size:118px;line-height:1.08}
 .pk.soon .go{color:var(--ink3);font-weight:400}
 
 /* game header + timer + field (SYSTEM.md §4) */
-.gh{position:absolute;top:36px;right:96px;left:96px;height:84px;display:flex;align-items:center;justify-content:space-between}
-.gt{display:flex;align-items:baseline;gap:22px;margin-right:190px}
+.gh{position:absolute;top:36px;right:96px;left:96px;height:84px;display:block}
+.gh .exit{position:absolute;left:0;top:6px}
+.gt{display:flex;align-items:baseline;gap:22px;position:absolute;top:84px;right:0;margin:0}
 .gname{font:500 38px var(--t);color:var(--ink)}
 .gskill{font:500 26px var(--t);letter-spacing:.06em;color:var(--kick)}
 .gp{position:absolute;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:20px;font:400 28px var(--t);color:var(--ink2);white-space:nowrap}
@@ -88,12 +89,12 @@ h1.xl{font-size:118px;line-height:1.08}
 .dots i{width:12px;height:12px;border-radius:50%;border:1.5px solid rgba(255,255,255,.45)}
 .dots i.on{background:var(--mark);border-color:var(--mark)}
 .dots i.done{background:rgba(255,255,255,.55);border-color:transparent}
-.gtimer{position:absolute;top:142px;right:96px;left:96px;height:6px;border-radius:3px;background:rgba(255,255,255,.09);direction:ltr;overflow:hidden}
+.gtimer{position:absolute;top:196px;right:96px;left:96px;height:6px;border-radius:3px;background:rgba(255,255,255,.09);direction:ltr;overflow:hidden}
 .gtimer b{display:block;height:100%;width:100%;border-radius:3px;margin-left:auto;
   background:linear-gradient(90deg,rgba(140,200,255,.55),rgba(236,237,245,.9));transition:filter .3s}
 .gtimer.late b{background:linear-gradient(90deg,rgba(140,200,255,.75),rgba(140,200,255,.95))}
 .gtimer.flash b{filter:brightness(1.6)}
-.field{position:absolute;top:190px;right:96px;left:96px;bottom:56px;border-radius:22px;border:1px solid var(--hair);background:rgba(15,20,56,.55);overflow:hidden;touch-action:none}
+.field{position:absolute;top:244px;right:96px;left:96px;bottom:56px;border-radius:22px;border:1px solid var(--hair);background:rgba(15,20,56,.55);overflow:hidden;touch-action:none}
 .stagelbl{position:absolute;top:24px;right:30px;font:500 28px var(--t);color:var(--ink2);z-index:3}
 .prompt{font:400 36px var(--t);color:var(--ink2);text-align:center}
 .prompt b{color:var(--ink);font-weight:500}
@@ -109,8 +110,8 @@ h1.xl{font-size:118px;line-height:1.08}
 .shake{animation:shake .45s ease-in-out}
 
 /* instruction card (mock 02) */
-.ins-l{position:absolute;top:200px;left:150px;width:700px;height:560px;border-radius:22px;border:1px solid var(--hair);background:rgba(17,22,62,.72);overflow:hidden;display:flex;align-items:center;justify-content:center}
-.ins-r{position:absolute;top:196px;right:150px;width:880px}
+.ins-l{position:absolute;top:220px;left:150px;width:700px;height:560px;border-radius:22px;border:1px solid var(--hair);background:rgba(17,22,62,.72);overflow:hidden;display:flex;align-items:center;justify-content:center}
+.ins-r{position:absolute;top:216px;right:150px;width:880px}
 .ins-r h1{margin-top:18px;font-size:80px;text-wrap:balance}   /* never a lone word on line 2 (Design build2 P2-1) */
 .steps{margin-top:30px;border-top:1px solid var(--hair)}
 .steps li{list-style:none;display:flex;gap:28px;padding:22px 0;border-bottom:1px solid var(--hair);font:400 34px/1.45 var(--t);color:var(--ink2)}
@@ -192,11 +193,11 @@ h1.xl{font-size:118px;line-height:1.08}
 .rs-box.one .rs-fact{font-size:34px}
 /* Guy play-test 22.11: visible time left (m:ss) beside the bar, and the +10 s overtime banner */
 .gtimer{left:250px}
-.gclock{position:absolute;top:122px;left:96px;width:130px;height:46px;display:flex;align-items:center;justify-content:center;border-radius:12px;border:1px solid var(--hair);background:rgba(17,22,62,.8);font:600 32px var(--d);color:var(--ink);direction:ltr;font-variant-numeric:tabular-nums;letter-spacing:.02em}
+.gclock{position:absolute;top:176px;left:96px;width:130px;height:46px;display:flex;align-items:center;justify-content:center;border-radius:12px;border:1px solid var(--hair);background:rgba(17,22,62,.8);font:600 32px var(--d);color:var(--ink);direction:ltr;font-variant-numeric:tabular-nums;letter-spacing:.02em}
 .gclock:empty{display:none}
 .gclock.late{color:#8CC8FF;border-color:rgba(140,200,255,.5)}
 .gclock.ot{color:#0D1130;background:#ECEDF5;border-color:#ECEDF5}
-.otb{position:absolute;top:106px;left:50%;transform:translateX(-50%) translateY(-12px);z-index:20;display:none;align-items:center;gap:18px;padding:11px 30px;border-radius:16px;background:#ECEDF5;color:#0D1130;font:600 34px var(--t);box-shadow:0 10px 40px rgba(0,0,0,.45);opacity:0;transition:opacity .25s,transform .25s;pointer-events:none}
+.otb{position:absolute;top:160px;left:50%;transform:translateX(-50%) translateY(-12px);z-index:20;display:none;align-items:center;gap:18px;padding:11px 30px;border-radius:16px;background:#ECEDF5;color:#0D1130;font:600 34px var(--t);box-shadow:0 10px 40px rgba(0,0,0,.45);opacity:0;transition:opacity .25s,transform .25s;pointer-events:none}
 .otb.on{display:flex;opacity:1;transform:translateX(-50%)}
 .otb b{min-width:46px;height:46px;border-radius:50%;background:#0D1130;color:#ECEDF5;display:flex;align-items:center;justify-content:center;font:700 30px var(--d);font-variant-numeric:tabular-nums}
 /* tablets in portrait: ask to turn the screen */
@@ -204,11 +205,14 @@ h1.xl{font-size:118px;line-height:1.08}
 @media (orientation:portrait){#rot{display:flex;position:fixed;inset:0;z-index:999;background:#05060f;color:#ECEDF5;align-items:center;justify-content:center;text-align:center;font:500 28px/1.5 var(--t);padding:40px}}
 .ins-lead{margin-top:14px;font:500 38px var(--t);color:var(--mark)}
 
-/* Guy 22.11 14:54: wordmark on every screen; QR on the start screen, no caption */
+/* Guy 22.11 14:54: wordmark on every screen; QR on the start screen.
+   15:11: caption above the start QR; in-game header top-right is logo only, game/skill on the next line. */
 .lm-logo{height:40px;width:auto}
 .hl .lm-logo{height:60px}
 .gh-logo{position:absolute;right:0;top:50%;transform:translateY(-50%);height:32px;z-index:2;pointer-events:none}
 .overlay .lm-logo,.endcard .lm-logo{height:44px}
-.start-qr{position:absolute;left:120px;top:330px;width:280px;height:280px;padding:16px;border-radius:16px;background:#fff;
-  box-shadow:0 12px 36px -16px rgba(4,6,20,.9)}
-.start-qr img{width:100%;height:100%}
+.start-qr{position:absolute;left:80px;top:248px;width:360px;display:flex;flex-direction:column;align-items:center;gap:16px}
+.start-qr-cap{font:400 40px/1.3 var(--t);color:var(--ink2);text-align:center;text-wrap:pretty}
+.start-qr-box{width:280px;height:280px;padding:16px;border-radius:16px;background:#fff;
+  box-shadow:0 12px 36px -16px rgba(4,6,20,.9);flex:none}
+.start-qr-box img{width:100%;height:100%}

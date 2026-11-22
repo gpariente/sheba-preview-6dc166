@@ -152,7 +152,7 @@
         <h1 class="xl">${TXT.headline}</h1>
         <div class="hact"><button class="cta huge" id="goGuided">חידוד מוח על ידי מאמן AI${ICON.arrow(44, "#FFFFFF", 2.6)}</button></div>
       </div>
-      <div class="start-qr" aria-hidden="true"><img src="assets/qr-app.svg" alt=""></div>
+      <div class="start-qr"><div class="start-qr-cap">סרקו והמשיכו לאמן את המוח גם מהבית</div><div class="start-qr-box"><img src="assets/qr-app.svg" alt=""></div></div>
       <div class="sk"><div class="skh"><div class="label">או בחרו מיומנות לאימון</div></div>
         <div class="skrow">${SKILLS.map((s) => `<button class="sk1" data-skill="${s.id}">${ICON[s.id]()}<div class="n">${esc(s.name)}</div><span class="ar">${ICON.arrow()}</span></button>`).join("")}</div>
       </div></div>`;
