@@ -101,13 +101,28 @@
   const view = () => $("#view");
   function setPlaying(on) { document.body.classList.toggle("playing", !!on); }
 
-  // Guided session (Guy play-test 22.11): four games, one per skill tile, in tile order.
-  // The coordination slot falls back to the one-finger-at-a-time catch game on a single-touch screen.
+  // Guided session: one game per skill tile, in tile order (פוקוס → זיכרון → חדות מחשבה → קואורדינציה).
+  // Guy 22.11 22:10: the game in each slot is chosen at random from that skill's playable games.
+  // Skill order stays fixed — the start-screen tiles and "משחק N מתוך 4" are built around that sequence.
+  // GUIDED_COORD still pins the coordination slot when it is not "auto" (kiosk hardware override).
+  // "auto" + a single-touch screen: תפיסה דו-ידית stands in for אימון שתי ידיים (same rule as playableFor).
+  function shuffle(list) {
+    const a = list.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+    }
+    return a;
+  }
   function guidedQueue() {
-    let co = CFG.GUIDED_COORD || "auto";
-    if (co === "auto") co = navigator.maxTouchPoints === 1 ? "two_hand_touch" : "two_hand_sync";
-    if (!GAMES[co]) co = "two_hand_sync";
-    return ["follow_me", "memory", "flex", co].filter((id) => GAMES[id]);
+    return SKILLS.map((s) => {
+      let items = playableFor(s.id);
+      if (s.id === "coord") {
+        const co = CFG.GUIDED_COORD || "auto";
+        if (co !== "auto" && GAMES[co] && items.some((it) => it.id === co)) items = items.filter((it) => it.id === co);
+      }
+      return items.length ? shuffle(items)[0].id : null;
+    }).filter(Boolean);
   }
   function wipe() {
     stopGame();
@@ -402,7 +417,7 @@
     $("#done").addEventListener("click", () => exitToStart("results_done"));
     $("#again").addEventListener("click", () => {
       // replay what was played: the trio after a guided session, the same game after a skill game
-      const mode = session.mode, queue = mode === "guided" ? guidedQueue() : session.queue.slice();
+      const mode = session.mode, queue = session.queue.slice();   // replay this session's games (guided included)
       count("play_again_" + mode); wipe();
       count(mode === "guided" ? "start_guided" : "start_skill"); session = { mode, queue, idx: 0, results: [] }; showInstr();
     });
@@ -524,5 +539,5 @@
     showStart();
   }
 
-  window.SHEBA = { register, boot, ICON, GAMES, Staircase, blend, plural, _debug: { get session() { return session; }, get inst() { return inst; }, get screen() { return screen; }, get stair() { return curStair; }, get ended() { return ended; }, clock, showResults: () => showResults(), setSession: (s) => (session = s), startGameId: (id) => { session = { mode: "skill", queue: [id], idx: 0, results: [] }; showInstr(); }, playableFor } };
+  window.SHEBA = { register, boot, ICON, GAMES, Staircase, blend, plural, _debug: { get session() { return session; }, get inst() { return inst; }, get screen() { return screen; }, get stair() { return curStair; }, get ended() { return ended; }, clock, showResults: () => showResults(), setSession: (s) => (session = s), startGameId: (id) => { session = { mode: "skill", queue: [id], idx: 0, results: [] }; showInstr(); }, playableFor, guidedQueue, shuffle } };
 })();

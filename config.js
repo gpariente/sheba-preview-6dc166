@@ -7,11 +7,11 @@ window.SHEBA_CONFIG = {
   // PLACEHOLDER — Guy sets the real PIN before the kiosk goes to Sheba. Digits only, 4–8 long.
   STAFF_PIN: "0000",
 
-  // Guided session (start button): four games, one per skill tile —
-  // עקוב אחרי (פוקוס) → אתגר הזיכרון (זיכרון) → מוח גמיש (חדות מחשבה) → coordination game below.
-  //   "auto"           → two_hand_sync (אימון שתי ידיים), unless the screen reports exactly one touch point,
-  //                      then two_hand_touch (תפיסה דו-ידית, one finger at a time)
-  //   "two_hand_sync"  → always the two-hand game
+  // Guided session (start button): four games, one per skill tile, in tile order
+  // (פוקוס → זיכרון → חדות מחשבה → קואורדינציה). Each slot picks at random from that skill's games.
+  //   "auto"           → coordination slot is a random coord game, except on a single-touch screen
+  //                      אימון שתי ידיים is left out and תפיסה דו-ידית stays in the pool
+  //   "two_hand_sync"  → always the two-hand game in the coordination slot
   //   "two_hand_touch" → always the catch game (use this if two-finger touch fails on the real screen)
   GUIDED_COORD: "auto",
 
